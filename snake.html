@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+      canvas{
+        background-color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+
+
+<script>
+
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+document.addEventListener('keydown', keyshit)
+
+size = 40;
+trail = [[160,160],[160,120]];
+xspeed = 0;
+yspeed = 40;
+ax = 360;
+ay = 360;
+
+function print() {
+
+ctx.clearRect(0,0,canvas.width,canvas.width)
+ctx.fillStyle='red';
+ctx.fillRect(ax,ay,size,size)
+ctx.fillStyle = 'lime';
+for (var i = 0; i < trail.length; i++) {
+  ctx.fillRect(trail[i][0],trail[i][1],size,size)
+}
+for (var i = 0; i < trail.length-1; i++) {
+  // very bad
+  if (trail[trail.length-i-1][0] === trail[0][0] && trail[trail.length-i-1][1] === trail[0][1]) {
+    for (var i = 0; i < trail.length; i++) {
+      ctx.fillStyle = 'red';
+      ctx.fillRect(trail[i][0],trail[i][1],size,size)
+      ctx.font = "110px Arial";
+      ctx.fillText('bruh', 100, 210);
+    }
+    clearInterval(interval);
+    return
+  }
+
+  trail[trail.length-i-1][0]=trail[trail.length-i-2][0]
+  trail[trail.length-i-1][1]=trail[trail.length-i-2][1]
+}
+
+trail[0][0]+=xspeed;
+trail[0][1]+=yspeed;
+if (trail[0][0]>=canvas.width) {trail[0][0]=0}
+if (trail[0][0]<0) {trail[0][0]=canvas.width-size}
+if (trail[0][1]>=canvas.height) {trail[0][1]=0}
+if (trail[0][1]<0) {trail[0][1]=canvas.height-size}
+if (trail[0][0]===ax && trail[0][1]===ay) {
+  trail.push([])
+  ax=Math.floor(Math.random()*10)*40;
+  ay=Math.floor(Math.random()*10)*40;
+}
+
+}var interval = setInterval(print, 200)
+
+function keyshit(e) {
+  switch (e.keyCode) {
+    case 37:
+      if (xspeed!=40) {
+        xspeed=-40
+        yspeed=0
+      }
+    break;
+    case 38:
+      if (yspeed!=40) {
+        xspeed=0
+        yspeed=-40
+      }
+    break;
+    case 39:
+      if (xspeed!=-40) {
+        xspeed=40
+        yspeed=0
+      }
+    break;
+    case 40:
+      if (yspeed!=-40) {
+        xspeed=0
+        yspeed=40
+      }
+    break;
+  }
+}
+
+</script>
+  </body>
+</html>
